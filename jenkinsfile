@@ -10,13 +10,19 @@ pipeline {
 
         stage('Check Python') {
             steps {
-                bat 'py --version'
+                bat '"C:\\Users\\thush\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" --version'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat '"C:\\Users\\thush\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pip install -r requirements.txt'
             }
         }
 
         stage('Validate Python Code') {
             steps {
-                bat 'py -m compileall -q backend'
+                bat '"C:\\Users\\thush\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m compileall -q backend'
             }
         }
 
@@ -34,7 +40,7 @@ pipeline {
         }
 
         failure {
-            echo 'Build failed. Check the Console Output.'
+            echo 'Build failed. Check Console Output.'
         }
     }
 }
