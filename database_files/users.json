@@ -1,0 +1,29 @@
+[
+  {
+    "_id": "6aca638ccfa0a14dc6d2a197",
+    "full_name": "Admin User",
+    "email": "admin@rentalwheels.com",
+    "password_hash": "$2b$12$3JxVYk3WRrVlUtJa0bYisO5fgaJVJp1FIRp/Bh/8OgQGncY1WycjW",
+    "phone": "+1 (555) 999-0001",
+    "role": "admin",
+    "created_at": "2026-10-10T16:10:51.969000"
+  },
+  {
+    "_id": "6aca638ccfa0a14dc6d2a198",
+    "full_name": "Branch Staff Agent",
+    "email": "staff@rentalwheels.com",
+    "password_hash": "$2b$12$F0ZLOUMptdMlpXGfflBT2./VKtnFYgt2OoLz5ck4PgsNtxM3x1R1W",
+    "phone": "+1 (555) 999-0002",
+    "role": "staff",
+    "created_at": "2026-10-10T16:10:52.259000"
+  },
+  {
+    "_id": "6aca638ccfa0a14dc6d2a199",
+    "full_name": "John Customer",
+    "email": "customer@gmail.com",
+    "password_hash": "$2b$12$tW2PeabJbm6w/EwrL.Vr3.cLUjSUddUHWrQ/Vm9VFQMnH1frq6nZm",
+    "phone": "+1 (555) 999-0003",
+    "role": "customer",
+    "created_at": "2026-10-10T16:10:52.548000"
+  }
+]

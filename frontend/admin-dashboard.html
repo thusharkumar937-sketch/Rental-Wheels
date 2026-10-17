@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Wheels - Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="border-b border-slate-800 bg-slate-950/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 text-2xl font-extrabold text-white tracking-tight">
+      <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-600/30">
+        <i class="fa-solid fa-car-side text-xl"></i>
+      </div>
+      RENTAL <span class="text-indigo-400">WHEELS</span>
+      <span class="text-xs bg-indigo-950 border border-indigo-800 text-indigo-400 px-2.5 py-0.5 rounded-full font-bold uppercase ml-2">ADMIN PORTAL</span>
+    </a>
+
+    <div class="flex items-center gap-4 text-xs font-semibold">
+      <a href="index.html" class="text-slate-400 hover:text-white transition">Customer Site</a>
+      <button onclick="handleLogout()" class="px-3.5 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 rounded-xl transition">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
+
+    <!-- Dashboard Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-black text-white">Administrator Control Panel</h1>
+        <p class="text-slate-400 text-sm">Monitor system metrics, manage vehicle inventory, verify customer KYC, and track revenue</p>
+      </div>
+      <button onclick="openAddVehicleModal()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center gap-2">
+        <i class="fa-solid fa-plus"></i> Add New Vehicle
+      </button>
+    </div>
+
+    <!-- METRICS CARDS OVERVIEW -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl">
+        <span class="text-[11px] font-bold uppercase text-slate-400 block mb-1">Total System Revenue</span>
+        <strong id="m-revenue" class="text-2xl font-black text-emerald-400 font-mono">$0.00</strong>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl">
+        <span class="text-[11px] font-bold uppercase text-slate-400 block mb-1">Fleet Count</span>
+        <strong id="m-fleet" class="text-2xl font-black text-white font-mono">0 Vehicles</strong>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl">
+        <span class="text-[11px] font-bold uppercase text-slate-400 block mb-1">Total Reservations</span>
+        <strong id="m-bookings" class="text-2xl font-black text-indigo-400 font-mono">0</strong>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl">
+        <span class="text-[11px] font-bold uppercase text-slate-400 block mb-1">Pending KYC Reviews</span>
+        <strong id="m-kyc" class="text-2xl font-black text-amber-400 font-mono">0 Pending</strong>
+      </div>
+    </div>
+
+    <!-- TWO-COLUMN ADMIN LAYOUT -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+      <!-- ADMIN SIDEBAR -->
+      <aside class="space-y-6">
+
+        <!-- Admin Profile Badge -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl text-center">
+          <div class="w-16 h-16 bg-indigo-600/20 border border-indigo-800 text-indigo-400 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-3">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <h3 class="font-bold text-white text-base">Admin Overseer</h3>
+          <p class="text-xs text-slate-400 mb-3">admin@rentalwheels.com</p>
+          <span class="px-3 py-0.5 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-full text-[10px] font-bold uppercase">System Active 🟢</span>
+        </div>
+
+        <!-- Navigation Menu Tabs -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-2 text-xs">
+          <h4 class="font-bold text-slate-400 uppercase tracking-wider mb-2 text-[11px] px-2">Admin Navigation</h4>
+          <button id="btn-tab-fleet" onclick="switchAdminTab('fleet')" class="w-full text-left flex items-center justify-between p-3 bg-indigo-600 text-white font-bold rounded-xl transition">
+            <span><i class="fa-solid fa-car-side mr-2"></i> Fleet Inventory</span>
+            <i class="fa-solid fa-chevron-right text-indigo-200"></i>
+          </button>
+          <button id="btn-tab-kyc" onclick="switchAdminTab('kyc')" class="w-full text-left flex items-center justify-between p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 font-semibold rounded-xl transition">
+            <span><i class="fa-solid fa-id-card mr-2"></i> KYC Verifications</span>
+            <i class="fa-solid fa-chevron-right text-slate-600"></i>
+          </button>
+          <button id="btn-tab-bookings" onclick="switchAdminTab('bookings')" class="w-full text-left flex items-center justify-between p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 font-semibold rounded-xl transition">
+            <span><i class="fa-solid fa-receipt mr-2"></i> Master Bookings</span>
+            <i class="fa-solid fa-chevron-right text-slate-600"></i>
+          </button>
+        </div>
+
+        <!-- Admin Quick Actions -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+          <h4 class="font-bold text-slate-400 uppercase tracking-wider text-[11px]">System Quick Actions</h4>
+          <button id="btn-add-vehicle" onclick="openAddVehicleModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-md">
+            <i class="fa-solid fa-plus mr-1"></i> Add Vehicle to Fleet
+          </button>
+          <button onclick="refreshAdminData()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition">
+            <i class="fa-solid fa-rotate-right mr-1"></i> Refresh System Data
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- MAIN CONTENT PANEL -->
+      <section class="lg:col-span-3">
+
+        <!-- FLEET INVENTORY SECTION -->
+        <div id="sec-fleet" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl overflow-x-auto">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <h3 class="font-bold text-white text-base">Vehicle Fleet Management</h3>
+            <span class="text-xs text-slate-400">Showing all registered fleet cars</span>
+          </div>
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 font-bold uppercase">
+                <th class="py-3 px-3">Vehicle</th>
+                <th class="py-3 px-3">Category</th>
+                <th class="py-3 px-3">Outlet</th>
+                <th class="py-3 px-3">Daily Rate</th>
+                <th class="py-3 px-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="table-fleet-body" class="divide-y divide-slate-800/60">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- KYC REVIEWS SECTION -->
+        <div id="sec-kyc" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl overflow-x-auto">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <h3 class="font-bold text-white text-base">Customer Driving License Verification Requests</h3>
+            <span class="text-xs text-slate-400">Review & approve customer documents</span>
+          </div>
+          <div id="kyc-review-list" class="space-y-4">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- MASTER BOOKINGS SECTION -->
+        <div id="sec-bookings" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl overflow-x-auto">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <h3 class="font-bold text-white text-base">Master System Reservations</h3>
+            <span class="text-xs text-slate-400">Complete audit log of all bookings</span>
+          </div>
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 font-bold uppercase">
+                <th class="py-3 px-3">Reference</th>
+                <th class="py-3 px-3">Customer</th>
+                <th class="py-3 px-3">Vehicle</th>
+                <th class="py-3 px-3">Dates</th>
+                <th class="py-3 px-3">Total Paid</th>
+                <th class="py-3 px-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="table-bookings-body" class="divide-y divide-slate-800/60">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ADD VEHICLE MODAL -->
+  <div id="modal-add-vehicle" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full relative shadow-2xl">
+      <button onclick="closeAddVehicleModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-xl font-bold text-white mb-4">Add Vehicle to Fleet</h3>
+      <form onsubmit="handleCreateVehicle(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Make</label>
+            <input type="text" id="v-make" required placeholder="Audi" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Model</label>
+            <input type="text" id="v-model" required placeholder="A6 Matrix" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Category</label>
+            <select id="v-category" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+              <option value="SUV">SUV</option>
+              <option value="Sedan">Sedan</option>
+              <option value="Hatchback">Hatchback</option>
+              <option value="Luxury">Luxury</option>
+              <option value="Electric">Electric</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Daily Rate ($)</label>
+            <input type="number" id="v-price" required step="1" placeholder="110" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Photo Image URL</label>
+          <input type="url" id="v-image" required placeholder="https://images.unsplash.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition">
+          Add Vehicle to System
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="py-8 border-t border-slate-800 text-center text-xs text-slate-500 mt-auto">
+    © 2026 Rental Wheels Admin Portal — Powered by Python Flask & MongoDB.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      let user = API.getUser();
+      if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
+        await autoLoginDemoAdmin();
+        user = API.getUser();
+      }
+
+      refreshAdminData();
+    });
+
+    async function autoLoginDemoAdmin() {
+      try {
+        const res = await API.request('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: 'admin@rentalwheels.com', password: 'admin123' })
+        });
+        API.setSession(res.token, res.user);
+      } catch (err) {
+        console.error('Auto login admin failed', err);
+      }
+    }
+
+    function handleLogout() {
+      API.clearSession();
+      window.location.href = 'login.html';
+    }
+
+    function refreshAdminData() {
+      loadAdminMetrics();
+      loadFleetTable();
+      loadKycReviews();
+      loadMasterBookings();
+    }
+
+    async function loadAdminMetrics() {
+      try {
+        const data = await API.request('/admin/metrics');
+        const m = data.metrics;
+        document.getElementById('m-revenue').innerText = `$${m.total_revenue.toFixed(2)}`;
+        document.getElementById('m-fleet').innerText = `${m.total_vehicles} Vehicles`;
+        document.getElementById('m-bookings').innerText = m.total_bookings;
+        document.getElementById('m-kyc').innerText = `${m.pending_kyc} Pending`;
+      } catch (err) {
+        console.error('Failed to load metrics', err);
+      }
+    }
+
+    function switchAdminTab(tab) {
+      document.getElementById('sec-fleet').classList.toggle('hidden', tab !== 'fleet');
+      document.getElementById('sec-kyc').classList.toggle('hidden', tab !== 'kyc');
+      document.getElementById('sec-bookings').classList.toggle('hidden', tab !== 'bookings');
+
+      document.getElementById('btn-tab-fleet').className = tab === 'fleet' ? 'w-full text-left flex items-center justify-between p-3 bg-indigo-600 text-white font-bold rounded-xl transition' : 'w-full text-left flex items-center justify-between p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 font-semibold rounded-xl transition';
+      document.getElementById('btn-tab-kyc').className = tab === 'kyc' ? 'w-full text-left flex items-center justify-between p-3 bg-indigo-600 text-white font-bold rounded-xl transition' : 'w-full text-left flex items-center justify-between p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 font-semibold rounded-xl transition';
+      document.getElementById('btn-tab-bookings').className = tab === 'bookings' ? 'w-full text-left flex items-center justify-between p-3 bg-indigo-600 text-white font-bold rounded-xl transition' : 'w-full text-left flex items-center justify-between p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 font-semibold rounded-xl transition';
+    }
+
+    async function loadFleetTable() {
+      try {
+        const data = await API.request('/vehicles?status=all');
+        const tbody = document.getElementById('table-fleet-body');
+        tbody.innerHTML = data.vehicles.map(v => `
+          <tr>
+            <td class="py-3 px-3 font-bold text-white flex items-center gap-3">
+              <img src="${v.image_url}" class="w-10 h-8 object-cover rounded border border-slate-800">
+              ${v.make} ${v.model} (${v.year})
+            </td>
+            <td class="py-3 px-3 text-slate-400">${v.category_name}</td>
+            <td class="py-3 px-3 text-slate-400">${v.branch_name}</td>
+            <td class="py-3 px-3 font-mono font-bold text-indigo-400">$${v.price_per_day}/day</td>
+            <td class="py-3 px-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                v.status === 'available' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-rose-950 text-rose-400 border border-rose-800'
+              }">${v.status}</span>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load fleet table', err);
+      }
+    }
+
+    async function loadKycReviews() {
+      try {
+        const data = await API.request('/kyc/admin/pending');
+        const container = document.getElementById('kyc-review-list');
+        if (data.kyc_list.length === 0) {
+          container.innerHTML = '<p class="text-xs text-slate-400 py-4">No pending KYC submissions found.</p>';
+          return;
+        }
+
+        container.innerHTML = data.kyc_list.map(k => `
+          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <h4 class="font-bold text-white text-sm">${k.user_name}</h4>
+                <span class="text-[11px] text-slate-400">(${k.user_email})</span>
+              </div>
+              <p class="text-xs text-indigo-400 font-mono">DL Number: <strong>${k.license_number}</strong> (Exp: ${k.license_expiry})</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase ${
+                k.status === 'verified' ? 'bg-emerald-950 text-emerald-400' : 'bg-amber-950 text-amber-400'
+              }">${k.status}</span>
+              ${k.status !== 'verified' ? `
+                <button onclick="reviewKyc('${k.id}', 'verified')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg">Approve</button>
+                <button onclick="reviewKyc('${k.id}', 'rejected')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-lg">Reject</button>
+              ` : ''}
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load KYC reviews', err);
+      }
+    }
+
+    async function reviewKyc(id, status) {
+      try {
+        await API.request(`/kyc/admin/verify/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({ status, admin_notes: `Reviewed by admin on ${new Date().toLocaleDateString()}` })
+        });
+        refreshAdminData();
+      } catch (err) {
+        alert('Failed to update KYC status');
+      }
+    }
+
+    async function loadMasterBookings() {
+      try {
+        const data = await API.request('/admin/bookings');
+        const tbody = document.getElementById('table-bookings-body');
+        tbody.innerHTML = data.bookings.map(b => `
+          <tr>
+            <td class="py-3 px-3 font-mono font-bold text-indigo-400">${b.booking_reference}</td>
+            <td class="py-3 px-3 text-white">${b.user_name}<br><span class="text-[10px] text-slate-500">${b.user_email}</span></td>
+            <td class="py-3 px-3 text-slate-300">${b.vehicle_name}</td>
+            <td class="py-3 px-3 text-slate-400">${b.start_date} to ${b.end_date}</td>
+            <td class="py-3 px-3 font-mono font-bold text-emerald-400">$${b.total_price.toFixed(2)}</td>
+            <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-950 text-emerald-400 border border-emerald-800">${b.status}</span></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load master bookings', err);
+      }
+    }
+
+    function openAddVehicleModal() {
+      document.getElementById('modal-add-vehicle').classList.remove('hidden');
+    }
+
+    function closeAddVehicleModal() {
+      document.getElementById('modal-add-vehicle').classList.add('hidden');
+    }
+
+    async function handleCreateVehicle(e) {
+      e.preventDefault();
+      const bodyData = {
+        make: document.getElementById('v-make').value,
+        model: document.getElementById('v-model').value,
+        category_name: document.getElementById('v-category').value,
+        price_per_day: parseFloat(document.getElementById('v-price').value),
+        image_url: document.getElementById('v-image').value
+      };
+
+      try {
+        await API.request('/vehicles', {
+          method: 'POST',
+          body: JSON.stringify(bodyData)
+        });
+        closeAddVehicleModal();
+        refreshAdminData();
+      } catch (err) {
+        alert(err.message || 'Failed to add vehicle');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Wheels - Profile & KYC Verification</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="border-b border-slate-800 bg-slate-950/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 text-2xl font-extrabold text-white tracking-tight">
+      <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-600/30">
+        <i class="fa-solid fa-car-side text-xl"></i>
+      </div>
+      RENTAL <span class="text-indigo-400">WHEELS</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300">
+      <a href="index.html" class="hover:text-white transition">Home</a>
+      <a href="vehicles.html" class="hover:text-white transition">Explore Vehicles</a>
+      <a href="kyc.html" class="text-indigo-400">Profile & KYC</a>
+    </div>
+
+    <div id="nav-auth-container" class="flex items-center gap-4">
+      <a href="login.html" class="px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl">Sign In</a>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-6 py-10">
+
+    <!-- USER PROFILE CARD -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div>
+          <h2 id="prof-name" class="text-2xl font-bold text-white">John Customer</h2>
+          <p id="prof-email" class="text-xs text-slate-400">customer@gmail.com</p>
+          <span id="prof-role" class="inline-block mt-2 px-2.5 py-0.5 bg-indigo-950 border border-indigo-800 text-indigo-400 rounded-full text-[11px] font-bold uppercase">Customer</span>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="autoLoginDemoCustomer()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white rounded-xl transition">
+          <i class="fa-solid fa-key mr-1"></i> Use Demo Account
+        </button>
+        <button onclick="handleLogout()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 rounded-xl transition">
+          Sign Out
+        </button>
+      </div>
+    </div>
+
+    <!-- KYC STATUS BANNER -->
+    <div id="kyc-status-banner" class="bg-emerald-950/40 border border-emerald-800 rounded-2xl p-6 mb-8 flex items-center gap-4 text-emerald-300 shadow-xl">
+      <div class="w-12 h-12 bg-emerald-900/60 rounded-xl flex items-center justify-center text-xl text-emerald-400 font-bold shrink-0">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div>
+        <h3 class="font-bold text-white text-base">KYC Verification Complete ✔️</h3>
+        <p class="text-xs text-emerald-400">Your driving license (DL: <strong>DL-1420110098765</strong>) is verified and active. You are fully eligible to rent any vehicle.</p>
+      </div>
+    </div>
+
+    <!-- DEMO LICENSE HINT CARD -->
+    <div class="bg-indigo-950/50 border border-indigo-800/80 p-4 rounded-2xl mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-indigo-300 shadow-lg">
+      <div>
+        <strong class="text-white block font-bold mb-0.5">💡 Demo Driving License Details</strong>
+        <span>Pre-filled License Number: <code class="bg-indigo-900 px-2.5 py-1 rounded text-white font-mono font-bold">DL-1420110098765</code> (Status: <strong class="text-emerald-400">Verified ✔️</strong>)</span>
+      </div>
+      <button onclick="fillDemoKyc()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow-md whitespace-nowrap">
+        Auto-Fill License Details
+      </button>
+    </div>
+
+    <!-- KYC UPLOAD FORM -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
+      <h3 class="text-xl font-bold text-white mb-2">Driving License & KYC Documents</h3>
+      <p class="text-xs text-slate-400 mb-6">Government regulations require a valid driving license verification prior to vehicle handover.</p>
+
+      <form id="form-kyc" onsubmit="handleKycSubmit(event)" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Driving License Number</label>
+            <input type="text" id="license-number" required value="DL-1420110098765" placeholder="DL-1420110098765" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 font-mono">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">License Expiry Date</label>
+            <input type="date" id="license-expiry" required value="2029-12-31" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 font-mono">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">License Front Photo (Optional in Demo)</label>
+            <input type="file" id="file-front" accept="image/*,.pdf" class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-950 file:text-indigo-400 hover:file:bg-indigo-900">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">License Back Photo (Optional in Demo)</label>
+            <input type="file" id="file-back" accept="image/*,.pdf" class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-950 file:text-indigo-400 hover:file:bg-indigo-900">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-kyc-submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2 text-sm">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span>Submit Documents for Verification</span>
+        </button>
+      </form>
+    </div>
+
+  </main>
+
+  <footer class="py-8 border-t border-slate-800 text-center text-xs text-slate-500 mt-auto">
+    © 2026 Rental Wheels Application — Powered by Python Flask & MongoDB.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      let user = API.getUser();
+      if (!user) {
+        await autoLoginDemoCustomer();
+        user = API.getUser();
+      }
+
+      if (user) {
+        document.getElementById('prof-name').innerText = user.full_name || 'John Customer';
+        document.getElementById('prof-email').innerText = user.email || 'customer@gmail.com';
+        document.getElementById('prof-role').innerText = user.role || 'customer';
+        checkAuthStatus();
+        loadKycStatus();
+      }
+    });
+
+    async function autoLoginDemoCustomer() {
+      try {
+        const res = await API.request('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: 'customer@gmail.com', password: 'customer123' })
+        });
+        API.setSession(res.token, res.user);
+        window.location.reload();
+      } catch (err) {
+        console.error('Auto login failed', err);
+      }
+    }
+
+    function checkAuthStatus() {
+      const user = API.getUser();
+      const navContainer = document.getElementById('nav-auth-container');
+      if (user) {
+        let dashboardLink = 'customer-dashboard.html';
+        if (user.role === 'admin') dashboardLink = 'admin-dashboard.html';
+        if (user.role === 'staff') dashboardLink = 'staff-dashboard.html';
+
+        navContainer.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-400 font-medium hidden sm:inline">Hello, <strong class="text-white">${user.full_name}</strong></span>
+            <a href="${dashboardLink}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl">
+              Dashboard
+            </a>
+          </div>
+        `;
+      }
+    }
+
+    function handleLogout() {
+      API.clearSession();
+      window.location.href = 'login.html';
+    }
+
+    function fillDemoKyc() {
+      document.getElementById('license-number').value = 'DL-1420110098765';
+      document.getElementById('license-expiry').value = '2029-12-31';
+    }
+
+    async function loadKycStatus() {
+      try {
+        const data = await API.request('/kyc/status');
+        const banner = document.getElementById('kyc-status-banner');
+
+        if (data.status === 'verified') {
+          banner.className = 'bg-emerald-950/40 border border-emerald-800 rounded-2xl p-6 mb-8 flex items-center gap-4 text-emerald-300 shadow-xl';
+          banner.innerHTML = `
+            <div class="w-12 h-12 bg-emerald-900/60 rounded-xl flex items-center justify-center text-xl text-emerald-400 font-bold shrink-0">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-base">KYC Verification Complete ✔️</h3>
+              <p class="text-xs text-emerald-400">Your driving license (DL: <strong>${data.kyc.license_number}</strong>) is approved and active. You are eligible to rent any vehicle.</p>
+            </div>
+          `;
+          document.getElementById('license-number').value = data.kyc.license_number;
+          document.getElementById('license-expiry').value = data.kyc.license_expiry;
+        } else if (data.status === 'pending') {
+          banner.className = 'bg-amber-950/40 border border-amber-800 rounded-2xl p-6 mb-8 flex items-center gap-4 text-amber-300 shadow-xl';
+          banner.innerHTML = `
+            <div class="w-12 h-12 bg-amber-900/60 rounded-xl flex items-center justify-center text-xl text-amber-400 font-bold shrink-0">
+              <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-base">Verification Under Review ⏳</h3>
+              <p class="text-xs text-amber-400">Your driving license (DL: <strong>${data.kyc.license_number}</strong>) has been submitted. Our branch admin is reviewing your document.</p>
+            </div>
+          `;
+          document.getElementById('license-number').value = data.kyc.license_number;
+          document.getElementById('license-expiry').value = data.kyc.license_expiry;
+        }
+      } catch (err) {
+        console.error('Failed to load KYC status', err);
+      }
+    }
+
+    async function handleKycSubmit(e) {
+      e.preventDefault();
+      const license_number = document.getElementById('license-number').value;
+      const license_expiry = document.getElementById('license-expiry').value;
+      const frontFile = document.getElementById('file-front').files[0];
+      const backFile = document.getElementById('file-back').files[0];
+
+      const formData = new FormData();
+      formData.append('license_number', license_number);
+      formData.append('license_expiry', license_expiry);
+      if (frontFile) formData.append('license_front', frontFile);
+      if (backFile) formData.append('license_back', backFile);
+
+      const token = API.getToken();
+
+      try {
+        const res = await fetch('http://127.0.0.1:5000/api/kyc/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+
+        alert('KYC Documents submitted successfully!');
+        loadKycStatus();
+      } catch (err) {
+        alert(err.message || 'Upload failed');
+      }
+    }
+  </script>
+</body>
+</html>

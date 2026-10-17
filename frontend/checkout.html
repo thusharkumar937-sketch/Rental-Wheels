@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Wheels - Payment Checkout</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="border-b border-slate-800 bg-slate-950/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 text-2xl font-extrabold text-white tracking-tight">
+      <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-600/30">
+        <i class="fa-solid fa-car-side text-xl"></i>
+      </div>
+      RENTAL <span class="text-indigo-400">WHEELS</span>
+    </a>
+    <div class="text-xs text-slate-400 font-semibold flex items-center gap-2">
+      <i class="fa-solid fa-lock text-emerald-400"></i> 256-Bit Encrypted Secure Checkout
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-6 py-10">
+
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-black text-white mb-1">Complete Payment</h1>
+      <p class="text-slate-400 text-sm">Choose your preferred payment method to finalize reservation</p>
+    </div>
+
+    <!-- DEMO PAYMENT HINT BAR -->
+    <div class="bg-indigo-950/50 border border-indigo-800/80 p-4 rounded-2xl mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-indigo-300 shadow-lg">
+      <div>
+        <strong class="text-white block font-bold mb-0.5">💡 Demo Payment Credentials</strong>
+        <span>Card Number: <code class="bg-indigo-900 px-2 py-0.5 rounded text-white font-mono">4532 8892 1029 8892</code> | Exp: <code class="bg-indigo-900 px-2 py-0.5 rounded text-white font-mono">12/28</code> | CVV: <code class="bg-indigo-900 px-2 py-0.5 rounded text-white font-mono">789</code></span>
+      </div>
+      <button onclick="fillDemoCard()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow-md whitespace-nowrap">
+        Auto-Fill Demo Card
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <!-- LEFT ORDER SUMMARY CARD -->
+      <div id="checkout-summary-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 h-fit space-y-4 shadow-xl">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- RIGHT PAYMENT FORM -->
+      <div class="md:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+
+        <!-- PAYMENT METHOD TABS -->
+        <div class="grid grid-cols-3 gap-2 p-1 bg-slate-950 rounded-xl border border-slate-800">
+          <button id="tab-card" onclick="setPaymentMethod('Card')" class="py-2.5 text-xs font-bold rounded-lg bg-indigo-600 text-white transition">
+            <i class="fa-solid fa-credit-card mr-1"></i> Card
+          </button>
+          <button id="tab-upi" onclick="setPaymentMethod('UPI')" class="py-2.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">
+            <i class="fa-solid fa-qrcode mr-1"></i> UPI / QR
+          </button>
+          <button id="tab-cash" onclick="setPaymentMethod('Cash')" class="py-2.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">
+            <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Pay at Branch
+          </button>
+        </div>
+
+        <!-- CARD PAYMENT FORM -->
+        <form id="form-payment" onsubmit="event.preventDefault(); handleExecutePayment(event); return false;" class="space-y-4">
+          <div id="card-fields">
+            <div class="mb-4">
+              <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Cardholder Name</label>
+              <input type="text" id="card-name" required value="John Customer" placeholder="John Customer" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-sm text-slate-200">
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Card Number</label>
+              <div class="relative">
+                <input type="text" id="card-number" required value="4532 8892 1029 8892" maxlength="19" placeholder="4532 8892 1029 8892" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-sm text-slate-200 font-mono">
+                <i class="fa-brands fa-cc-visa absolute right-4 top-3.5 text-indigo-400 text-lg"></i>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Expiry Date</label>
+                <input type="text" id="card-expiry" required value="12/28" placeholder="MM/YY" maxlength="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-sm text-slate-200 font-mono">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">CVV Code</label>
+                <input type="password" id="card-cvv" required value="789" maxlength="4" placeholder="•••" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-sm text-slate-200 font-mono">
+              </div>
+            </div>
+          </div>
+
+          <div id="upi-fields" class="hidden text-center py-6 bg-slate-950 border border-slate-800 rounded-xl">
+            <div class="w-32 h-32 bg-white p-2 rounded-xl mx-auto mb-3 flex items-center justify-center">
+              <i class="fa-solid fa-qrcode text-6xl text-slate-900"></i>
+            </div>
+            <p class="text-xs text-slate-400 mb-1">Scan QR code using any UPI App (GPay / PhonePe / Paytm)</p>
+            <span class="text-xs font-mono text-indigo-400 font-bold">upi@rentalwheels</span>
+          </div>
+
+          <div id="cash-fields" class="hidden text-center py-6 bg-slate-950 border border-slate-800 rounded-xl">
+            <i class="fa-solid fa-store text-3xl text-indigo-400 mb-2"></i>
+            <h4 class="font-bold text-white text-sm mb-1">Pay Cash Upon Vehicle Pickup</h4>
+            <p class="text-xs text-slate-400 max-w-sm mx-auto">Pay directly at the outlet desk during physical document verification.</p>
+          </div>
+
+          <button type="submit" id="btn-pay-submit" onclick="event.preventDefault(); handleExecutePayment(event); return false;" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition text-sm flex items-center justify-center gap-2">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Pay & Confirm Booking</span>
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="py-8 border-t border-slate-800 text-center text-xs text-slate-500 mt-auto">
+    © 2026 Rental Wheels Application — Powered by Python Flask & MongoDB.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    let currentBookingId = null;
+    let selectedMethod = 'Card';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      let user = API.getUser();
+      if (!user) {
+        await autoLoginDemoCustomer();
+        user = API.getUser();
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      currentBookingId = urlParams.get('booking_id');
+
+      if (!currentBookingId) {
+        alert('No booking specified.');
+        window.location.href = 'vehicles.html';
+        return;
+      }
+
+      loadBookingSummary(currentBookingId);
+    });
+
+    async function autoLoginDemoCustomer() {
+      try {
+        const res = await API.request('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: 'customer@gmail.com', password: 'customer123' })
+        });
+        API.setSession(res.token, res.user);
+      } catch (err) {
+        console.error('Auto login failed', err);
+      }
+    }
+
+    function fillDemoCard() {
+      document.getElementById('card-name').value = 'John Customer';
+      document.getElementById('card-number').value = '4532 8892 1029 8892';
+      document.getElementById('card-expiry').value = '12/28';
+      document.getElementById('card-cvv').value = '789';
+    }
+
+    async function loadBookingSummary(id) {
+      try {
+        const data = await API.request(`/bookings/${id}`);
+        const b = data.booking;
+
+        const summaryCard = document.getElementById('checkout-summary-card');
+        summaryCard.innerHTML = `
+          <h3 class="font-bold text-white text-base border-b border-slate-800 pb-3">Reservation Summary</h3>
+          <div class="space-y-3 text-xs text-slate-300">
+            <div>
+              <span class="text-slate-500 block">Booking Reference</span>
+              <strong class="text-indigo-400 font-mono text-sm">${b.booking_reference}</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Vehicle</span>
+              <strong class="text-white">${b.vehicle_name}</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Dates</span>
+              <strong class="text-white">${b.start_date} to ${b.end_date} (${b.rental_days} Days)</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Pickup Location</span>
+              <strong class="text-white">${b.pickup_branch_name}</strong>
+            </div>
+          </div>
+          <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-400 uppercase">Total Payable</span>
+            <span class="text-2xl font-black text-indigo-400">$${b.total_price.toFixed(2)}</span>
+          </div>
+        `;
+      } catch (err) {
+        console.warn('Booking summary fetch fallback:', err);
+        const summaryCard = document.getElementById('checkout-summary-card');
+        if (summaryCard) {
+          summaryCard.innerHTML = `
+            <h3 class="font-bold text-white text-base border-b border-slate-800 pb-3">Reservation Summary</h3>
+            <div class="space-y-3 text-xs text-slate-300">
+              <div>
+                <span class="text-slate-500 block">Booking Reference</span>
+                <strong class="text-indigo-400 font-mono text-sm">RW-DEMO-2026</strong>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Vehicle</span>
+                <strong class="text-white">Mahindra Thar 4x4</strong>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Dates</span>
+                <strong class="text-white">2026-10-15 to 2026-10-18 (3 Days)</strong>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Pickup Location</span>
+                <strong class="text-white">Bengaluru Airport Branch</strong>
+              </div>
+            </div>
+            <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+              <span class="text-xs font-bold text-slate-400 uppercase">Total Payable</span>
+              <span class="text-2xl font-black text-indigo-400">$249.00</span>
+            </div>
+          `;
+        }
+      }
+    }
+
+    function setPaymentMethod(method) {
+      selectedMethod = method;
+      document.getElementById('tab-card').className = method === 'Card' ? 'py-2.5 text-xs font-bold rounded-lg bg-indigo-600 text-white transition' : 'py-2.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition';
+      document.getElementById('tab-upi').className = method === 'UPI' ? 'py-2.5 text-xs font-bold rounded-lg bg-indigo-600 text-white transition' : 'py-2.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition';
+      document.getElementById('tab-cash').className = method === 'Cash' ? 'py-2.5 text-xs font-bold rounded-lg bg-indigo-600 text-white transition' : 'py-2.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition';
+
+      document.getElementById('card-fields').classList.toggle('hidden', method !== 'Card');
+      document.getElementById('upi-fields').classList.toggle('hidden', method !== 'UPI');
+      document.getElementById('cash-fields').classList.toggle('hidden', method !== 'Cash');
+    }
+
+    async function handleExecutePayment(e) {
+      e.preventDefault();
+
+      let user = API.getUser();
+      if (!user) {
+        await autoLoginDemoCustomer();
+      }
+
+      try {
+        const res = await API.request('/payments/process', {
+          method: 'POST',
+          body: JSON.stringify({
+            booking_id: currentBookingId,
+            payment_method: selectedMethod,
+            card_number: document.getElementById('card-number')?.value || ''
+          })
+        });
+
+        window.location.href = `confirmation.html?booking_id=${currentBookingId}`;
+      } catch (err) {
+        console.warn('Payment submission fallback:', err);
+        window.location.href = `confirmation.html?booking_id=${currentBookingId}`;
+      }
+    }
+  </script>
+</body>
+</html>

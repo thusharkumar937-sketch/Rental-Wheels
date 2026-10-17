@@ -1,0 +1,30 @@
+# Python virtual environments
+venv/
+.venv/
+backend/venv/
+
+# Node.js dependencies
+node_modules/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Python generated files
+__pycache__/
+*.py[cod]
+
+# Test project maintained separately
+tests/
+
+# Uploaded runtime files
+backend/uploads/*
+
+# Local editor files
+.vscode/
+.idea/
+
+# Logs
+*.log

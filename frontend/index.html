@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Wheels - Drive Your Dreams</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="border-b border-slate-800 bg-slate-950/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 text-2xl font-extrabold text-white tracking-tight">
+      <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-600/30">
+        <i class="fa-solid fa-car-side text-xl"></i>
+      </div>
+      RENTAL <span class="text-indigo-400">WHEELS</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300">
+      <a href="index.html" class="text-indigo-400">Home</a>
+      <a href="vehicles.html" class="hover:text-white transition">Explore Vehicles</a>
+      <a href="kyc.html" class="hover:text-white transition">Profile & KYC</a>
+    </div>
+
+    <div id="nav-auth-container" class="flex items-center gap-4">
+      <!-- Injected via JS based on login session -->
+      <a href="login.html" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition shadow-lg shadow-indigo-600/20">
+        Sign In / Register
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header class="relative py-20 px-6 lg:px-12 flex flex-col items-center justify-center text-center overflow-hidden">
+    <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[120px] -z-10"></div>
+
+    <span class="px-4 py-1.5 bg-indigo-950/80 border border-indigo-700/50 rounded-full text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-6">
+      ✨ Premium & Flexible Fleet Solutions
+    </span>
+
+    <h1 class="text-4xl md:text-6xl font-black text-white max-w-4xl leading-tight mb-6">
+      Rent Premium Cars Instantly <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400">With Real-Time Availability</span>
+    </h1>
+
+    <p class="text-slate-400 text-base md:text-lg max-w-2xl mb-10">
+      Compare prices, verify availability across outlets, and book your ride in seconds. Zero hidden costs, fully insured vehicles.
+    </p>
+
+    <!-- QUICK SEARCH BAR CARD -->
+    <div class="w-full max-w-4xl glass-card rounded-2xl p-6 shadow-2xl text-left border border-slate-700/60">
+      <form onsubmit="handleHeroSearch(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Pickup Outlet</label>
+          <select id="search-branch" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 px-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="all">All Outlets</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Category</label>
+          <select id="search-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 px-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="all">All Categories</option>
+            <option value="SUV">SUV</option>
+            <option value="Sedan">Sedan</option>
+            <option value="Hatchback">Hatchback</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Electric">Electric</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Pickup Date</label>
+          <input type="date" id="search-pickup-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 px-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div class="flex items-end">
+          <button id="btn-hero-search" type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2 text-sm">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search Vehicles</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </header>
+
+  <!-- CATEGORIES SECTION -->
+  <section class="py-16 px-6 max-w-7xl mx-auto w-full">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-white">Explore Categories</h2>
+        <p class="text-slate-400 text-sm">Choose from a variety of vehicle types tailored to your trip</p>
+      </div>
+      <a href="vehicles.html" class="text-indigo-400 text-sm font-semibold hover:underline flex items-center gap-1">
+        View All <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <div id="category-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+      <!-- Rendered via JS -->
+    </div>
+  </section>
+
+  <!-- FEATURED FLEET SECTION -->
+  <section class="py-16 px-6 max-w-7xl mx-auto w-full border-t border-slate-800/80">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-white">Featured Rental Fleet</h2>
+        <p class="text-slate-400 text-sm">Top rated models available for instant booking</p>
+      </div>
+    </div>
+
+    <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Rendered via JS -->
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="py-16 px-6 max-w-7xl mx-auto w-full border-t border-slate-800/80">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-white mb-2">Why Choose Rental Wheels?</h2>
+      <p class="text-slate-400 text-sm">Designed for seamless rental experiences from start to return</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-center">
+        <div class="w-14 h-14 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+          <i class="fa-solid fa-shield-heart"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Verified & Insured</h3>
+        <p class="text-slate-400 text-sm">Every vehicle undergoes maintenance inspections and carries full insurance coverage.</p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-center">
+        <div class="w-14 h-14 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Real-Time Booking</h3>
+        <p class="text-slate-400 text-sm">Instant confirmation without waiting. Real-time availability check prevents double bookings.</p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-center">
+        <div class="w-14 h-14 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+          <i class="fa-solid fa-receipt"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Transparent Pricing</h3>
+        <p class="text-slate-400 text-sm">No hidden charges or surprise fees at pickup. Instant digital invoice with tax breakdown.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-8 border-t border-slate-800 text-center text-xs text-slate-500">
+    © 2026 Rental Wheels Application — Powered by Python Flask & MongoDB.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthStatus();
+      loadBranches();
+      loadCategories();
+      loadFeaturedVehicles();
+      
+      // Set default pickup date to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('search-pickup-date').value = today;
+    });
+
+    function checkAuthStatus() {
+      const user = API.getUser();
+      const navContainer = document.getElementById('nav-auth-container');
+      if (user) {
+        let dashboardLink = 'customer-dashboard.html';
+        if (user.role === 'admin') dashboardLink = 'admin-dashboard.html';
+        if (user.role === 'staff') dashboardLink = 'staff-dashboard.html';
+
+        navContainer.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-400 font-medium hidden sm:inline">Hello, <strong class="text-white">${user.full_name}</strong></span>
+            <a href="${dashboardLink}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition">
+              <i class="fa-solid fa-gauge mr-1"></i> Dashboard
+            </a>
+            <button onclick="handleLogout()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-xl transition">
+              Logout
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function handleLogout() {
+      API.clearSession();
+      window.location.reload();
+    }
+
+    async function loadBranches() {
+      try {
+        const data = await API.request('/branches');
+        const select = document.getElementById('search-branch');
+        data.branches.forEach(b => {
+          select.innerHTML += `<option value="${b.id}">${b.branch_name}</option>`;
+        });
+      } catch (err) {
+        console.error('Failed to load branches', err);
+      }
+    }
+
+    async function loadCategories() {
+      try {
+        const data = await API.request('/categories');
+        const grid = document.getElementById('category-grid');
+        const icons = {
+          'SUV': 'fa-shield-cat',
+          'Sedan': 'fa-car',
+          'Hatchback': 'fa-car-side',
+          'Luxury': 'fa-gem',
+          'Electric': 'fa-bolt'
+        };
+
+        grid.innerHTML = data.categories.map(c => `
+          <div onclick="window.location.href='vehicles.html?category=${c.category_name}'" class="bg-slate-900 border border-slate-800 hover:border-indigo-500/50 p-5 rounded-2xl text-center cursor-pointer transition transform hover:-translate-y-1">
+            <div class="w-12 h-12 bg-indigo-950/60 text-indigo-400 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl border border-indigo-800/40">
+              <i class="fa-solid ${icons[c.category_name] || 'fa-car'}"></i>
+            </div>
+            <h4 class="font-bold text-white text-sm mb-1">${c.category_name}</h4>
+            <p class="text-[11px] text-slate-500 line-clamp-1">${c.description}</p>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load categories', err);
+      }
+    }
+
+    async function loadFeaturedVehicles() {
+      try {
+        const data = await API.request('/vehicles?status=available');
+        const grid = document.getElementById('featured-grid');
+        const vehicles = data.vehicles.slice(0, 3); // Take top 3
+
+        grid.innerHTML = vehicles.map(v => `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-slate-700 transition flex flex-col">
+            <div class="h-48 bg-slate-800 relative overflow-hidden">
+              <img src="${v.image_url}" alt="${v.make} ${v.model}" class="w-full h-full object-cover">
+              <span class="absolute top-3 right-3 px-3 py-1 bg-slate-950/80 backdrop-blur-md border border-slate-700 text-xs font-bold text-indigo-400 rounded-full">
+                ${v.category_name}
+              </span>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <h3 class="font-bold text-lg text-white">${v.make} ${v.model}</h3>
+                  <span class="text-xs text-slate-400 font-mono">${v.year}</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4 flex items-center gap-1">
+                  <i class="fa-solid fa-location-dot text-indigo-400"></i> ${v.branch_name}
+                </p>
+                <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-800 text-[11px] text-slate-300 text-center mb-4">
+                  <div><i class="fa-solid fa-gas-pump text-slate-500 block mb-1"></i>${v.fuel_type}</div>
+                  <div><i class="fa-solid fa-gear text-slate-500 block mb-1"></i>${v.transmission}</div>
+                  <div><i class="fa-solid fa-users text-slate-500 block mb-1"></i>${v.seating_capacity} Seats</div>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-2">
+                <div>
+                  <span class="text-xl font-extrabold text-indigo-400">$${v.price_per_day}</span>
+                  <span class="text-xs text-slate-500">/day</span>
+                </div>
+                <a href="vehicles.html?id=${v.id}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition">
+                  Book Now
+                </a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load featured vehicles', err);
+      }
+    }
+
+    function handleHeroSearch(e) {
+      e.preventDefault();
+      const branch = document.getElementById('search-branch').value;
+      const category = document.getElementById('search-category').value;
+      const date = document.getElementById('search-pickup-date').value;
+      window.location.href = `vehicles.html?branch=${branch}&category=${category}&date=${date}`;
+    }
+  </script>
+</body>
+</html>

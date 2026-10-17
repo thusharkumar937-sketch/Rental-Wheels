@@ -1,0 +1,86 @@
+[
+  {
+    "_id": "6aca638ccfa0a14dc6d2a19c",
+    "booking_id": "6aca638ccfa0a14dc6d2a19b",
+    "booking_reference": "RW-2026-8891",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_email": "customer@gmail.com",
+    "transaction_id": "TXN-88492019",
+    "payment_method": "Card",
+    "amount": 308.87,
+    "status": "success",
+    "payment_date": "2026-09-19T16:10:52.552000"
+  },
+  {
+    "_id": "6aca638ccfa0a14dc6d2a19e",
+    "booking_id": "6aca638ccfa0a14dc6d2a19d",
+    "booking_reference": "RW-2026-4412",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_email": "customer@gmail.com",
+    "transaction_id": "TXN-77192088",
+    "payment_method": "UPI",
+    "amount": 354.0,
+    "status": "success",
+    "payment_date": "2026-09-24T16:10:52.553000"
+  },
+  {
+    "_id": "6aca6468024ea2c90ea03e4e",
+    "booking_id": "6aca6460024ea2c90ea03e4d",
+    "booking_reference": "RW-2026-5457",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_email": "customer@gmail.com",
+    "transaction_id": "TXN-21062873",
+    "payment_method": "Card",
+    "amount": 134.52,
+    "status": "success",
+    "payment_date": "2026-10-10T16:14:32.248000"
+  },
+  {
+    "_id": "6aca6525024ea2c90ea03e52",
+    "booking_id": "6aca6522024ea2c90ea03e51",
+    "booking_reference": "RW-2026-5155",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_email": "customer@gmail.com",
+    "transaction_id": "TXN-38134253",
+    "payment_method": "Card",
+    "amount": 159.3,
+    "status": "success",
+    "payment_date": "2026-10-10T16:17:41.281000"
+  },
+  {
+    "_id": "6acb69eee8b16463e6f653ae",
+    "booking_id": "demo_001",
+    "booking_reference": "RW-2026-8891",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_email": "customer@gmail.com",
+    "transaction_id": "TXN-64152622",
+    "payment_method": "Card",
+    "amount": 308.87,
+    "status": "success",
+    "payment_date": "2026-10-11T10:50:22.901000"
+  },
+  {
+    "_id": "6acb6a1fde36665f84f8644c",
+    "booking_id": "demo_001",
+    "booking_reference": "RW-2026-8891",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_email": "customer@gmail.com",
+    "transaction_id": "TXN-82998121",
+    "payment_method": "Card",
+    "amount": 308.87,
+    "status": "success",
+    "payment_date": "2026-10-11T10:51:11.952000"
+  },
+  {
+    "_id": "6acb6acdde36665f84f8644f",
+    "booking_id": "demo_001",
+    "booking_reference": "RW-2026-8891",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_email": "customer@gmail.com",
+    "transaction_id": "TXN-44357801",
+    "payment_method": "Card",
+    "amount": 308.87,
+    "status": "success",
+    "payment_date": "2026-10-11T10:54:05.577000"
+  }
+]

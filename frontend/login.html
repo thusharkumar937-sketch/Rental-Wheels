@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Wheels - Sign In & Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .glass {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between font-sans relative overflow-x-hidden">
+
+  <!-- Background Decorative Blurs -->
+  <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl -z-10"></div>
+  <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl -z-10"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="border-b border-slate-800 bg-slate-950/80 backdrop-filter backdrop-blur-lg px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 text-2xl font-bold tracking-tight text-white">
+      <div class="bg-indigo-600 p-2 rounded-xl text-white">
+        <i class="fa-solid font-bold fa-car-side"></i>
+      </div>
+      RENTAL <span class="text-indigo-400">WHEELS</span>
+    </a>
+    <div class="flex items-center gap-4 text-sm font-medium">
+      <a href="index.html" class="text-slate-300 hover:text-white transition">Home</a>
+      <a href="vehicles.html" class="text-slate-300 hover:text-white transition">Vehicles</a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md bg-slate-800/90 border border-slate-700/60 rounded-2xl p-8 shadow-2xl backdrop-blur-xl">
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-white mb-2">Welcome Back</h1>
+        <p class="text-slate-400 text-sm">Sign in or create a new account to book your ride</p>
+      </div>
+
+      <!-- Auth Toggle Tabs -->
+      <div class="flex rounded-xl bg-slate-900 p-1 mb-6 border border-slate-700/50">
+        <button id="tab-login" onclick="switchTab('login')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition-all shadow-md">
+          Sign In
+        </button>
+        <button id="tab-register" onclick="switchTab('register')" class="flex-1 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition-all">
+          Register
+        </button>
+      </div>
+
+      <!-- Notification / Alert Box -->
+      <div id="alert-box" class="hidden mb-6 p-4 rounded-xl text-sm font-medium border flex items-center gap-3"></div>
+
+      <!-- LOGIN FORM -->
+      <form id="form-login" onsubmit="handleLogin(event)" class="space-y-5">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Email Address</label>
+          <div class="relative">
+            <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-slate-500"></i>
+            <input type="email" id="login-email" required placeholder="name@example.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-11 pr-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Password</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-500"></i>
+            <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-11 pr-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 flex items-center justify-center gap-2">
+          <span>Sign In to Rental Wheels</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        
+        <div class="text-center pt-2 text-xs text-slate-500">
+          Demo Credentials: <span class="text-indigo-400 cursor-pointer" onclick="fillDemo('customer@gmail.com', 'customer123')">Customer</span> | <span class="text-indigo-400 cursor-pointer" onclick="fillDemo('staff@rentalwheels.com', 'staff123')">Staff</span> | <span class="text-indigo-400 cursor-pointer" onclick="fillDemo('admin@rentalwheels.com', 'admin123')">Admin</span>
+        </div>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="form-register" onsubmit="handleRegister(event)" class="hidden space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Full Name</label>
+          <input type="text" id="reg-name" required placeholder="John Doe" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Email Address</label>
+          <input type="email" id="reg-email" required placeholder="john@example.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Phone Number</label>
+          <input type="tel" id="reg-phone" required placeholder="+1 555 123 4567" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Password</label>
+          <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Account Role</label>
+          <select id="reg-role" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-4 text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="customer">Customer / Renter</option>
+            <option value="staff">Branch Staff Agent</option>
+            <option value="admin">Administrator / Fleet Manager</option>
+          </select>
+        </div>
+
+        <button type="submit" id="btn-reg-submit" class="w-full mt-2 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200">
+          Create Account
+        </button>
+      </form>
+
+    </div>
+  </main>
+
+  <!-- OTP VERIFICATION MODAL -->
+  <div id="modal-otp" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
+      <div class="w-16 h-16 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-1">Verify OTP</h3>
+      <p class="text-xs text-slate-400 mb-4">Enter the 6-digit verification code sent to your email/phone.</p>
+      
+      <div class="bg-indigo-950/40 border border-indigo-800/50 p-3 rounded-xl mb-4 text-xs text-indigo-300 font-mono">
+        💡 Demo Verification Code: <strong class="text-white">123456</strong>
+      </div>
+
+      <form onsubmit="handleVerifyOTP(event)" class="space-y-4">
+        <input type="text" id="input-otp" maxlength="6" required placeholder="123456" class="w-full text-center tracking-[0.5em] text-2xl font-mono bg-slate-900 border border-slate-700 rounded-xl py-3 text-white focus:outline-none focus:border-indigo-500">
+        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition">
+          Confirm & Complete Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="py-6 border-t border-slate-800/60 text-center text-xs text-slate-500">
+    © 2026 Rental Wheels System — Built with Python Flask & MongoDB.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    let pendingToken = null;
+    let pendingUser = null;
+
+    function switchTab(tab) {
+      const loginForm = document.getElementById('form-login');
+      const regForm = document.getElementById('form-register');
+      const tabLogin = document.getElementById('tab-login');
+      const tabRegister = document.getElementById('tab-register');
+      hideAlert();
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        regForm.classList.add('hidden');
+        tabLogin.className = 'flex-1 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition-all shadow-md';
+        tabRegister.className = 'flex-1 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition-all';
+      } else {
+        regForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        tabRegister.className = 'flex-1 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition-all shadow-md';
+        tabLogin.className = 'flex-1 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition-all';
+      }
+    }
+
+    function showAlert(msg, isSuccess = false) {
+      const alertBox = document.getElementById('alert-box');
+      alertBox.className = `mb-6 p-4 rounded-xl text-sm font-medium border flex items-center gap-3 ${
+        isSuccess ? 'bg-emerald-950/40 border-emerald-800 text-emerald-300' : 'bg-rose-950/40 border-rose-800 text-rose-300'
+      }`;
+      alertBox.innerHTML = `<i class="fa-solid ${isSuccess ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i> <span>${msg}</span>`;
+      alertBox.classList.remove('hidden');
+    }
+
+    function hideAlert() {
+      document.getElementById('alert-box').classList.add('hidden');
+    }
+
+    function fillDemo(email, pw) {
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = pw;
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      hideAlert();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const res = await API.request('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+
+        if (res.otp_required) {
+          pendingToken = res.token;
+          pendingUser = res.user;
+          document.getElementById('modal-otp').classList.remove('hidden');
+          document.getElementById('input-otp').focus();
+        } else {
+          API.setSession(res.token, res.user);
+          redirectByRole(res.user.role);
+        }
+      } catch (err) {
+        showAlert(err.message || 'Login failed. Check credentials.');
+      }
+    }
+
+    async function handleVerifyOTP(e) {
+      e.preventDefault();
+      const otp = document.getElementById('input-otp').value.trim();
+
+      try {
+        await API.request('/auth/verify-otp', {
+          method: 'POST',
+          body: JSON.stringify({ otp, token: pendingToken })
+        });
+
+        API.setSession(pendingToken, pendingUser);
+        document.getElementById('modal-otp').classList.add('hidden');
+        redirectByRole(pendingUser.role);
+      } catch (err) {
+        alert(err.message || 'Invalid OTP code.');
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      hideAlert();
+      const full_name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const phone = document.getElementById('reg-phone').value;
+      const password = document.getElementById('reg-password').value;
+      const role = document.getElementById('reg-role').value;
+
+      try {
+        const res = await API.request('/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({ full_name, email, phone, password, role })
+        });
+
+        API.setSession(res.token, res.user);
+        showAlert('Account created successfully! Redirecting...', true);
+        setTimeout(() => redirectByRole(res.user.role), 1500);
+      } catch (err) {
+        showAlert(err.message || 'Registration failed.');
+      }
+    }
+
+    function redirectByRole(role) {
+      if (role === 'admin') {
+        window.location.href = 'admin-dashboard.html';
+      } else if (role === 'staff') {
+        window.location.href = 'staff-dashboard.html';
+      } else {
+        window.location.href = 'customer-dashboard.html';
+      }
+    }
+  </script>
+</body>
+</html>

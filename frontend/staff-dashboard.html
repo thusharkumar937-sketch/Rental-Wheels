@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Wheels - Branch Staff Desk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="border-b border-slate-800 bg-slate-950/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 text-2xl font-extrabold text-white tracking-tight">
+      <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-600/30">
+        <i class="fa-solid fa-car-side text-xl"></i>
+      </div>
+      RENTAL <span class="text-indigo-400">WHEELS</span>
+      <span class="text-xs bg-emerald-950 border border-emerald-800 text-emerald-400 px-2.5 py-0.5 rounded-full font-bold uppercase ml-2">STAFF DESK</span>
+    </a>
+
+    <div class="flex items-center gap-4 text-xs font-semibold">
+      <a href="index.html" class="text-slate-400 hover:text-white transition">Customer Portal</a>
+      <button onclick="handleLogout()" class="px-3.5 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 rounded-xl transition">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
+
+    <!-- Dashboard Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-black text-white">Branch Agent Desk</h1>
+        <p class="text-slate-400 text-sm">Perform physical vehicle handovers, conduct return condition inspections, and log maintenance</p>
+      </div>
+      <button onclick="openMaintenanceModal()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-xl transition shadow-lg shadow-amber-600/20 flex items-center gap-2">
+        <i class="fa-solid fa-wrench"></i> Log Maintenance Service
+      </button>
+    </div>
+
+    <!-- TWO-COLUMN STAFF LAYOUT -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="space-y-6">
+
+        <!-- Agent Profile Badge -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl text-center">
+          <div class="w-16 h-16 bg-emerald-600/20 border border-emerald-800 text-emerald-400 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-3">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <h3 id="staff-name" class="font-bold text-white text-base">Branch Staff Agent</h3>
+          <p id="staff-email" class="text-xs text-slate-400 mb-3">staff@rentalwheels.com</p>
+          <span class="px-3 py-0.5 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-full text-[10px] font-bold uppercase">On Duty 🟢</span>
+        </div>
+
+        <!-- Outlet Queue Metrics -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+          <h4 class="font-bold text-slate-400 uppercase tracking-wider text-[11px]">Shift Queue Metrics</h4>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400">Pending Handovers:</span>
+            <strong id="sq-handover" class="text-indigo-400 font-mono font-bold">0</strong>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400">Active Returns Queue:</span>
+            <strong id="sq-return" class="text-emerald-400 font-mono font-bold">0</strong>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400">Outlet Location:</span>
+            <strong class="text-white">Downtown Outlet</strong>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3 text-xs">
+          <h4 class="font-bold text-slate-400 uppercase tracking-wider text-[11px]">Staff Quick Actions</h4>
+          <button id="btn-log-maintenance" onclick="openMaintenanceModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow-md flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wrench"></i> Log Maintenance
+          </button>
+          <button onclick="loadQueues()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-rotate-right"></i> Refresh Shift Queue
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- MAIN CONTENT QUEUES -->
+      <section class="lg:col-span-3 space-y-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- HANDOVER QUEUE CARD -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+            <h3 class="font-bold text-white text-base border-b border-slate-800 pb-3 flex items-center justify-between">
+              <span><i class="fa-solid fa-key text-indigo-400 mr-2"></i> Today's Vehicle Handovers</span>
+              <span id="handover-count" class="text-xs font-mono text-indigo-400 bg-indigo-950 px-2.5 py-0.5 rounded-full border border-indigo-800">0 Queue</span>
+            </h3>
+            <div id="pending-handovers-list">
+              <div id="handover-queue" class="space-y-3">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- RETURN INSPECTION QUEUE -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+            <h3 class="font-bold text-white text-base border-b border-slate-800 pb-3 flex items-center justify-between">
+              <span><i class="fa-solid fa-arrow-rotate-left text-emerald-400 mr-2"></i> Vehicle Returns & Inspection</span>
+              <span id="return-count" class="text-xs font-mono text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-800">0 Active</span>
+            </h3>
+            <div id="return-queue" class="space-y-3">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- HANDOVER MODAL -->
+  <div id="modal-handover" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full relative shadow-2xl">
+      <button onclick="closeHandoverModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-xl font-bold text-white mb-2">Vehicle Pickup Handover</h3>
+      <p id="ho-ref" class="text-xs font-mono text-indigo-400 mb-4">Ref: RW-2026-XXXX</p>
+      
+      <form onsubmit="submitHandover(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Starting Odometer Reading (km)</label>
+          <input type="number" id="ho-odo" required value="15420" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 font-mono">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Starting Fuel Level</label>
+          <select id="ho-fuel" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200">
+            <option value="100%">100% (Full Tank)</option>
+            <option value="75%">75% Tank</option>
+            <option value="50%">50% Tank</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Pre-handover Notes / Checklist</label>
+          <input type="text" id="ho-notes" value="Vehicle clean, keys issued, documents verified." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-indigo-600/30">
+          Confirm Handover & Issue Key
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- RETURN INSPECTION MODAL -->
+  <div id="modal-return" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full relative shadow-2xl">
+      <button onclick="closeReturnModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-xl font-bold text-white mb-2">Vehicle Return Inspection</h3>
+      <p id="ret-ref" class="text-xs font-mono text-emerald-400 mb-4">Ref: RW-2026-XXXX</p>
+
+      <form onsubmit="submitReturn(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Return Odometer Reading (km)</label>
+          <input type="number" id="ret-odo" required value="15850" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 font-mono">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Return Fuel Level</label>
+            <select id="ret-fuel" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-slate-200">
+              <option value="100%">100% Full</option>
+              <option value="75%">75% Tank</option>
+              <option value="50%">50% Tank</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Extra Charges ($)</label>
+            <input type="number" id="ret-extra" value="0.00" step="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-slate-200 font-mono">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Inspection Condition</label>
+          <select id="ret-result" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-slate-200">
+            <option value="passed">Passed (Ready for Next Renter)</option>
+            <option value="servicing">Failed (Requires Wash / Servicing)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-emerald-600/30">
+          Complete Return & Reset Status
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- LOG MAINTENANCE MODAL -->
+  <div id="modal-maintenance" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
+    <div id="modal-maint" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full relative shadow-2xl">
+      <button onclick="closeMaintenanceModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-xl font-bold text-white mb-4">Log Vehicle Servicing</h3>
+
+      <form onsubmit="submitMaintenance(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Select Fleet Vehicle</label>
+          <select id="maint-vehicle-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200"></select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Service Type</label>
+          <input type="text" id="maint-type" required value="Routine Oil Change & Inspection" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Estimated Cost ($)</label>
+          <input type="number" id="maint-cost" required value="120" step="10" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 font-mono">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-amber-600/30">
+          Log Service & Mark Servicing
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="py-8 border-t border-slate-800 text-center text-xs text-slate-500 mt-auto">
+    © 2026 Rental Wheels Staff Desk — Powered by Python Flask & MongoDB.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    let activeHandoverBookingId = null;
+    let activeReturnBookingId = null;
+    let allVehicles = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      let user = API.getUser();
+      if (!user || (user.role !== 'staff' && user.role !== 'admin')) {
+        await autoLoginDemoStaff();
+        user = API.getUser();
+      }
+
+      if (user) {
+        document.getElementById('staff-name').innerText = user.full_name || 'Branch Staff Agent';
+        document.getElementById('staff-email').innerText = user.email || 'staff@rentalwheels.com';
+      }
+
+      loadQueues();
+      loadVehicleSelect();
+    });
+
+    async function autoLoginDemoStaff() {
+      try {
+        const res = await API.request('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: 'staff@rentalwheels.com', password: 'staff123' })
+        });
+        API.setSession(res.token, res.user);
+      } catch (err) {
+        console.error('Auto login staff failed', err);
+      }
+    }
+
+    function handleLogout() {
+      API.clearSession();
+      window.location.href = 'login.html';
+    }
+
+    async function loadQueues() {
+      try {
+        const data = await API.request('/admin/bookings');
+        const bookings = data.bookings;
+
+        const handovers = bookings.filter(b => b.status === 'confirmed');
+        const returns = bookings.filter(b => b.status === 'active' || b.status === 'confirmed');
+
+        document.getElementById('handover-count').innerText = `${handovers.length} Queue`;
+        document.getElementById('return-count').innerText = `${returns.length} Active`;
+
+        document.getElementById('sq-handover').innerText = handovers.length;
+        document.getElementById('sq-return').innerText = returns.length;
+
+        const hContainer = document.getElementById('handover-queue');
+        if (handovers.length === 0) {
+          hContainer.innerHTML = '<p class="text-xs text-slate-400 py-4 text-center">No pending handovers in queue.</p>';
+        } else {
+          hContainer.innerHTML = handovers.map(b => `
+            <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="flex justify-between items-center">
+                <strong class="text-white text-xs font-mono">${b.booking_reference}</strong>
+                <span class="text-[10px] text-indigo-400 font-bold uppercase">Pickup Today</span>
+              </div>
+              <p class="text-xs text-slate-300">Customer: <strong>${b.user_name}</strong></p>
+              <p class="text-xs text-slate-400">Vehicle: ${b.vehicle_name}</p>
+              <button onclick="openHandoverModal('${b.id}', '${b.booking_reference}')" class="w-full mt-2 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition">
+                Complete Handover & Issue Key
+              </button>
+            </div>
+          `).join('');
+        }
+
+        const rContainer = document.getElementById('return-queue');
+        if (returns.length === 0) {
+          rContainer.innerHTML = '<p class="text-xs text-slate-400 py-4 text-center">No active vehicles out for return.</p>';
+        } else {
+          rContainer.innerHTML = returns.map(b => `
+            <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="flex justify-between items-center">
+                <strong class="text-white text-xs font-mono">${b.booking_reference}</strong>
+                <span class="text-[10px] text-emerald-400 font-bold uppercase">Return Check</span>
+              </div>
+              <p class="text-xs text-slate-300">Customer: <strong>${b.user_name}</strong></p>
+              <p class="text-xs text-slate-400">Vehicle: ${b.vehicle_name}</p>
+              <button onclick="openReturnModal('${b.id}', '${b.booking_reference}')" class="w-full mt-2 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition">
+                Log Return & Inspection
+              </button>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Failed to load queues', err);
+      }
+    }
+
+    async function loadVehicleSelect() {
+      try {
+        const data = await API.request('/vehicles?status=all');
+        allVehicles = data.vehicles;
+        const select = document.getElementById('maint-vehicle-select');
+        select.innerHTML = allVehicles.map(v => `
+          <option value="${v.id}">${v.make} ${v.model} (${v.license_plate}) - ${v.status}</option>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load vehicle list', err);
+      }
+    }
+
+    function openHandoverModal(id, ref) {
+      activeHandoverBookingId = id;
+      document.getElementById('ho-ref').innerText = `Ref: ${ref}`;
+      document.getElementById('modal-handover').classList.remove('hidden');
+    }
+    function closeHandoverModal() { document.getElementById('modal-handover').classList.add('hidden'); }
+
+    async function submitHandover(e) {
+      e.preventDefault();
+      try {
+        const res = await API.request('/staff/handover', {
+          method: 'POST',
+          body: JSON.stringify({
+            booking_id: activeHandoverBookingId,
+            start_odometer: parseInt(document.getElementById('ho-odo').value),
+            start_fuel: document.getElementById('ho-fuel').value,
+            notes: document.getElementById('ho-notes').value
+          })
+        });
+        alert(res.message);
+        closeHandoverModal();
+        loadQueues();
+      } catch (err) {
+        alert(err.message || 'Handover failed');
+      }
+    }
+
+    function openReturnModal(id, ref) {
+      activeReturnBookingId = id;
+      document.getElementById('ret-ref').innerText = `Ref: ${ref}`;
+      document.getElementById('modal-return').classList.remove('hidden');
+    }
+    function closeReturnModal() { document.getElementById('modal-return').classList.add('hidden'); }
+
+    async function submitReturn(e) {
+      e.preventDefault();
+      try {
+        const res = await API.request('/staff/return', {
+          method: 'POST',
+          body: JSON.stringify({
+            booking_id: activeReturnBookingId,
+            return_odometer: parseInt(document.getElementById('ret-odo').value),
+            return_fuel: document.getElementById('ret-fuel').value,
+            extra_charges: parseFloat(document.getElementById('ret-extra').value),
+            inspection_result: document.getElementById('ret-result').value
+          })
+        });
+        alert(res.message);
+        closeReturnModal();
+        loadQueues();
+      } catch (err) {
+        alert(err.message || 'Return inspection failed');
+      }
+    }
+
+    function openMaintenanceModal() { 
+      const m1 = document.getElementById('modal-maint'); if (m1) m1.classList.remove('hidden');
+      const m2 = document.getElementById('modal-maintenance'); if (m2) m2.classList.remove('hidden');
+    }
+    function closeMaintenanceModal() { 
+      const m1 = document.getElementById('modal-maint'); if (m1) m1.classList.add('hidden');
+      const m2 = document.getElementById('modal-maintenance'); if (m2) m2.classList.add('hidden');
+    }
+
+    async function submitMaintenance(e) {
+      e.preventDefault();
+      try {
+        const res = await API.request('/staff/maintenance', {
+          method: 'POST',
+          body: JSON.stringify({
+            vehicle_id: document.getElementById('maint-vehicle-select').value,
+            service_type: document.getElementById('maint-type').value,
+            cost: parseFloat(document.getElementById('maint-cost').value)
+          })
+        });
+        alert(res.message);
+        closeMaintenanceModal();
+      } catch (err) {
+        alert(err.message || 'Maintenance log failed');
+      }
+    }
+  </script>
+</body>
+</html>

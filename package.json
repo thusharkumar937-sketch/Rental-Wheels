@@ -1,0 +1,28 @@
+{
+  "name": "rental-wheels",
+  "version": "1.0.0",
+  "description": "Rental Wheels Car Rental Web Application",
+  "main": "backend/run.py",
+  "scripts": {
+    "start": "concurrently --names \"BACKEND,FRONTEND,BROWSER\" --prefix-colors \"blue,green,magenta\" \"npm run backend\" \"npm run frontend\" \"npm run open\"",
+    "backend": "venv\\Scripts\\python backend/run.py",
+    "frontend": "venv\\Scripts\\python -m http.server 8000 --directory frontend",
+    "open": "node -e \"setTimeout(() => require('child_process').exec('start http://127.0.0.1:8000/index.html'), 1500)\"",
+    "test": "venv\\Scripts\\python tests/selenium_suite/run_all_150_tests.py",
+    "test:suite": "venv\\Scripts\\python -m unittest tests/selenium_test_suite.py",
+    "seed": "venv\\Scripts\\python backend/seed.py",
+    "export-db": "venv\\Scripts\\python database_files/export_db.py",
+    "dev": "npm start"
+  },
+  "keywords": [
+    "car-rental",
+    "flask",
+    "mongodb",
+    "tailwind"
+  ],
+  "author": "Rental Wheels Team",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

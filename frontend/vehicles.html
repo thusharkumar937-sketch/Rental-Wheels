@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Wheels - Vehicle Inventory & Catalog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="border-b border-slate-800 bg-slate-950/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 text-2xl font-extrabold text-white tracking-tight">
+      <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-600/30">
+        <i class="fa-solid fa-car-side text-xl"></i>
+      </div>
+      RENTAL <span class="text-indigo-400">WHEELS</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300">
+      <a href="index.html" class="hover:text-white transition">Home</a>
+      <a href="vehicles.html" class="text-indigo-400">Explore Vehicles</a>
+      <a href="kyc.html" class="hover:text-white transition">Profile & KYC</a>
+    </div>
+
+    <div id="nav-auth-container" class="flex items-center gap-4">
+      <a href="login.html" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition">
+        Sign In / Register
+      </a>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
+    
+    <!-- Title & Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-black text-white">Vehicle Inventory & Catalog</h1>
+        <p class="text-slate-400 text-sm">Filter, compare, and reserve vehicles with real-time availability</p>
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        <span class="text-slate-400 text-xs">Sort by:</span>
+        <select id="filter-sort" onchange="applyFilters()" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="year-desc">Newest Models First</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+      <!-- FILTER SIDEBAR -->
+      <aside class="bg-slate-900 border border-slate-800 p-6 rounded-2xl h-fit space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+            <i class="fa-solid fa-filter text-indigo-400"></i> Filters
+          </h3>
+          <button onclick="resetFilters()" class="text-xs text-indigo-400 hover:underline">Reset All</button>
+        </div>
+
+        <!-- Category Filter -->
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Category</label>
+          <select id="filter-category" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+            <option value="all">All Categories</option>
+            <option value="SUV">SUV</option>
+            <option value="Sedan">Sedan</option>
+            <option value="Hatchback">Hatchback</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Electric">Electric</option>
+          </select>
+        </div>
+
+        <!-- Outlet / Branch Filter -->
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Branch Outlet</label>
+          <select id="filter-branch" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+            <option value="all">All Outlets</option>
+          </select>
+        </div>
+
+        <!-- Fuel Type Filter -->
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Fuel Type</label>
+          <select id="filter-fuel" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+            <option value="all">Any Fuel Type</option>
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
+            <option value="EV">Electric (EV)</option>
+          </select>
+        </div>
+
+        <!-- Transmission Filter -->
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Transmission</label>
+          <select id="filter-transmission" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+            <option value="all">Any Transmission</option>
+            <option value="Automatic">Automatic</option>
+            <option value="Manual">Manual</option>
+          </select>
+        </div>
+
+        <!-- Max Price Slider -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-xs font-bold uppercase text-slate-400">Max Daily Rate</label>
+            <span id="price-val" class="text-xs font-mono text-indigo-400 font-bold">$200/day</span>
+          </div>
+          <input type="range" id="filter-max-price" min="20" max="250" value="200" step="10" oninput="updatePriceLabel(this.value)" onchange="applyFilters()" class="w-full accent-indigo-500">
+        </div>
+
+      </aside>
+
+      <!-- VEHICLE CATALOG GRID -->
+      <section class="lg:col-span-3">
+        <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- VEHICLE SPECIFICATIONS MODAL -->
+  <div id="modal-vehicle-detail" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl overflow-hidden relative">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="modal-content">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <footer class="py-8 border-t border-slate-800 text-center text-xs text-slate-500 mt-auto">
+    © 2026 Rental Wheels Application — Powered by Python Flask & MongoDB.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    let allVehicles = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthStatus();
+      loadBranches();
+      
+      // Parse URL parameters if redirected from homepage
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryParam = urlParams.get('category');
+      const branchParam = urlParams.get('branch');
+      const idParam = urlParams.get('id');
+
+      if (categoryParam) document.getElementById('filter-category').value = categoryParam;
+      if (branchParam && branchParam !== 'all') document.getElementById('filter-branch').value = branchParam;
+
+      loadVehicles().then(() => {
+        if (idParam) {
+          openVehicleModal(idParam);
+        }
+      });
+    });
+
+    function checkAuthStatus() {
+      const user = API.getUser();
+      const navContainer = document.getElementById('nav-auth-container');
+      if (user) {
+        let dashboardLink = 'customer-dashboard.html';
+        if (user.role === 'admin') dashboardLink = 'admin-dashboard.html';
+        if (user.role === 'staff') dashboardLink = 'staff-dashboard.html';
+
+        navContainer.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-400 font-medium hidden sm:inline">Hello, <strong class="text-white">${user.full_name}</strong></span>
+            <a href="${dashboardLink}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition">
+              <i class="fa-solid fa-gauge mr-1"></i> Dashboard
+            </a>
+            <button onclick="handleLogout()" class="px-3 py-2 bg-slate-800 text-slate-300 text-xs rounded-xl">Logout</button>
+          </div>
+        `;
+      }
+    }
+
+    function handleLogout() {
+      API.clearSession();
+      window.location.reload();
+    }
+
+    async function loadBranches() {
+      try {
+        const data = await API.request('/branches');
+        const select = document.getElementById('filter-branch');
+        data.branches.forEach(b => {
+          select.innerHTML += `<option value="${b.id}">${b.branch_name}</option>`;
+        });
+      } catch (err) {
+        console.error('Failed to load branches', err);
+      }
+    }
+
+    function updatePriceLabel(val) {
+      document.getElementById('price-val').innerText = `$${val}/day`;
+    }
+
+    async function loadVehicles() {
+      try {
+        const data = await API.request('/vehicles?status=available');
+        allVehicles = data.vehicles;
+        applyFilters();
+      } catch (err) {
+        console.error('Failed to load vehicles', err);
+      }
+    }
+
+    function applyFilters() {
+      const category = document.getElementById('filter-category').value;
+      const branch = document.getElementById('filter-branch').value;
+      const fuel = document.getElementById('filter-fuel').value;
+      const transmission = document.getElementById('filter-transmission').value;
+      const maxPrice = parseFloat(document.getElementById('filter-max-price').value);
+      const sort = document.getElementById('filter-sort').value;
+
+      let filtered = allVehicles.filter(v => {
+        if (category !== 'all' && v.category_name !== category) return false;
+        if (branch !== 'all' && v.branch_id !== branch) return false;
+        if (fuel !== 'all' && v.fuel_type !== fuel) return false;
+        if (transmission !== 'all' && v.transmission !== transmission) return false;
+        if (v.price_per_day > maxPrice) return false;
+        return true;
+      });
+
+      if (sort === 'price-asc') {
+        filtered.sort((a, b) => a.price_per_day - b.price_per_day);
+      } else if (sort === 'price-desc') {
+        filtered.sort((a, b) => b.price_per_day - a.price_per_day);
+      } else if (sort === 'year-desc') {
+        filtered.sort((a, b) => b.year - a.year);
+      }
+
+      renderGrid(filtered);
+    }
+
+    function resetFilters() {
+      document.getElementById('filter-category').value = 'all';
+      document.getElementById('filter-branch').value = 'all';
+      document.getElementById('filter-fuel').value = 'all';
+      document.getElementById('filter-transmission').value = 'all';
+      document.getElementById('filter-max-price').value = 200;
+      updatePriceLabel(200);
+      applyFilters();
+    }
+
+    function renderGrid(vehicles) {
+      const grid = document.getElementById('catalog-grid');
+      if (vehicles.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center bg-slate-900 border border-slate-800 rounded-2xl">
+            <i class="fa-solid fa-car-burst text-4xl text-slate-600 mb-3"></i>
+            <h3 class="text-lg font-bold text-white mb-1">No Vehicles Found</h3>
+            <p class="text-xs text-slate-400">Try adjusting your filters to explore available models.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = vehicles.map(v => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col hover:border-slate-700 transition">
+          <div class="h-44 bg-slate-800 relative overflow-hidden">
+            <img src="${v.image_url}" alt="${v.make} ${v.model}" class="w-full h-full object-cover">
+            <span class="absolute top-3 right-3 px-3 py-1 bg-slate-950/80 border border-slate-700 text-xs font-bold text-indigo-400 rounded-full">
+              ${v.category_name}
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-base text-white mb-0.5">${v.make} ${v.model}</h3>
+              <p class="text-[11px] text-slate-400 mb-3"><i class="fa-solid fa-location-dot text-indigo-400"></i> ${v.branch_name}</p>
+              
+              <div class="grid grid-cols-3 gap-1 py-2 border-y border-slate-800 text-[11px] text-slate-300 text-center mb-4">
+                <div><i class="fa-solid fa-gas-pump text-slate-500 block mb-1"></i>${v.fuel_type}</div>
+                <div><i class="fa-solid fa-gear text-slate-500 block mb-1"></i>${v.transmission}</div>
+                <div><i class="fa-solid fa-users text-slate-500 block mb-1"></i>${v.seating_capacity} Seats</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+              <div>
+                <span class="text-lg font-extrabold text-indigo-400">$${v.price_per_day}</span>
+                <span class="text-[10px] text-slate-500">/day</span>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="openVehicleModal('${v.id}')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-xl transition">
+                  Details
+                </button>
+                <button onclick="proceedToBooking('${v.id}')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition">
+                  Book
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openVehicleModal(id) {
+      const v = allVehicles.find(item => item.id === id);
+      if (!v) return;
+
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/2">
+            <img src="${v.image_url}" alt="${v.make} ${v.model}" class="w-full h-56 object-cover rounded-xl border border-slate-800">
+            <div class="mt-3 flex items-center justify-between text-xs text-slate-400">
+              <span>License Plate: <strong class="text-slate-200">${v.license_plate}</strong></span>
+              <span>Color: <strong class="text-slate-200">${v.color}</strong></span>
+            </div>
+          </div>
+          <div class="md:w-1/2 flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">${v.category_name} Series</span>
+              <h2 class="text-2xl font-black text-white mb-2">${v.make} ${v.model} (${v.year})</h2>
+              <p class="text-xs text-slate-400 mb-4"><i class="fa-solid fa-location-dot text-indigo-400"></i> Station: ${v.branch_name}</p>
+
+              <div class="space-y-2 text-xs text-slate-300 border-t border-b border-slate-800 py-3 mb-4">
+                <div class="flex justify-between"><span>Seating Capacity:</span><strong class="text-white">${v.seating_capacity} Persons</strong></div>
+                <div class="flex justify-between"><span>Fuel & Efficiency:</span><strong class="text-white">${v.fuel_type} (${v.mileage})</strong></div>
+                <div class="flex justify-between"><span>Transmission:</span><strong class="text-white">${v.transmission}</strong></div>
+                <div class="flex justify-between"><span>Status:</span><span class="px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded-full font-bold uppercase text-[10px]">Available</span></div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+              <div>
+                <span class="text-2xl font-black text-indigo-400">$${v.price_per_day}</span>
+                <span class="text-xs text-slate-500">/day</span>
+              </div>
+              <button onclick="proceedToBooking('${v.id}')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition">
+                Book This Vehicle
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modal-vehicle-detail').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal-vehicle-detail').classList.add('hidden');
+    }
+
+    function proceedToBooking(vehicleId) {
+      window.location.href = `booking.html?vehicle_id=${vehicleId}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "6aca638ccfa0a14dc6d2a19f",
+    "promo_code": "WHEELS2026",
+    "discount_percent": 15,
+    "max_discount": 50.0,
+    "valid_until": "2026-12-31",
+    "is_active": true
+  },
+  {
+    "_id": "6aca638ccfa0a14dc6d2a1a0",
+    "promo_code": "WELCOME10",
+    "discount_percent": 10,
+    "max_discount": 30.0,
+    "valid_until": "2026-12-31",
+    "is_active": true
+  }
+]

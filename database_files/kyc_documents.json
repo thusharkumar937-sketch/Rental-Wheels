@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "6aca638ccfa0a14dc6d2a19a",
+    "user_id": "6aca638ccfa0a14dc6d2a199",
+    "user_name": "John Customer",
+    "user_email": "customer@gmail.com",
+    "license_number": "DL-1420110098765",
+    "license_expiry": "2029-12-31",
+    "license_front_url": "/uploads/kyc/sample_license_front.jpg",
+    "license_back_url": "/uploads/kyc/sample_license_back.jpg",
+    "status": "verified",
+    "admin_notes": "Verified automatically for demo testing",
+    "updated_at": "2026-10-10T16:10:52.549000"
+  }
+]

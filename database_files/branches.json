@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "6aca638bcfa0a14dc6d2a183",
+    "branch_name": "Downtown Central Outlet",
+    "address": "123 Main Commercial Street, City Center",
+    "city": "Metropolis",
+    "contact_phone": "+1 (555) 100-2001",
+    "created_at": "2026-10-10T16:10:51.666000"
+  },
+  {
+    "_id": "6aca638bcfa0a14dc6d2a184",
+    "branch_name": "International Airport Branch",
+    "address": "Terminal 2 Pickup Hub, Airport Boulevard",
+    "city": "Metropolis",
+    "contact_phone": "+1 (555) 100-2002",
+    "created_at": "2026-10-10T16:10:51.666000"
+  },
+  {
+    "_id": "6aca638bcfa0a14dc6d2a185",
+    "branch_name": "Tech Park Station",
+    "address": "Building 4, Silicon Avenue",
+    "city": "Metropolis",
+    "contact_phone": "+1 (555) 100-2003",
+    "created_at": "2026-10-10T16:10:51.666000"
+  }
+]
