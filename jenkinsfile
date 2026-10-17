@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Check Python') {
+            steps {
+                bat 'python --version'
+            }
+        }
+
+        stage('Validate Python Code') {
+            steps {
+                bat 'python -m compileall -q backend'
+            }
+        }
+
+        stage('Check Node.js') {
+            steps {
+                bat 'node --version'
+                bat 'npm --version'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Rental Wheels validation completed successfully!'
+        }
+
+        failure {
+            echo 'Build failed. Check the Console Output.'
+        }
+    }
+}
