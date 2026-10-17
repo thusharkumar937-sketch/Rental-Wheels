@@ -4,19 +4,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                echo 'Source code downloaded from GitHub'
             }
         }
 
         stage('Check Python') {
             steps {
-                bat 'python --version'
+                bat 'py --version'
             }
         }
 
         stage('Validate Python Code') {
             steps {
-                bat 'python -m compileall -q backend'
+                bat 'py -m compileall -q backend'
             }
         }
 
