@@ -38,6 +38,11 @@ pipeline {
                 bat '"C:\\Users\\thush\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest backend -v'
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t rental-wheels:latest .'
+            }
+        }
     }
 
     post {
