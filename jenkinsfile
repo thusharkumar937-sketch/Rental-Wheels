@@ -32,15 +32,21 @@ pipeline {
                 bat 'npm --version'
             }
         }
+
+        stage('Run Automated Tests') {
+            steps {
+                bat '"C:\\Users\\thush\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest backend/test_health.py -v'
+            }
+        }
     }
 
     post {
         success {
-            echo 'Rental Wheels validation completed successfully!'
+            echo 'Rental Wheels validation and automated tests completed successfully!'
         }
 
         failure {
-            echo 'Build failed. Check Console Output.'
+            echo 'Build or automated tests failed. Check Console Output.'
         }
     }
 }
