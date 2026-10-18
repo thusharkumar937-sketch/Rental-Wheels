@@ -35,7 +35,7 @@ pipeline {
 
         stage('Run Automated Tests') {
             steps {
-                bat '"C:\\Users\\thush\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest backend/test_health.py -v'
+                bat '"C:\\Users\\thush\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest backend -v'
             }
         }
     }
