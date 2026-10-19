@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rental-wheels:latest
+    container_name: rental-wheels-container
+    ports:
+      - "5001:5000"
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  frontend:
+    image: python:3.13-slim
+    container_name: rental-wheels-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app:ro
+    command: python -m http.server 8000 --directory /app
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
